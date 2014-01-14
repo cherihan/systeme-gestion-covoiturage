@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+
+<hibernate-mapping package="com.covoiturage">
+	<class
+		name="Utilisateur"
+		table="utilisateur"
+	>
+		<id
+			name="UtilisateurID"
+			type="integer"
+			column="UtilisateurID"
+		>
+			<generator class="identity"/>
+		</id>
+
+		<property
+			name="DateNaissance"
+			column="DateNaissance"
+			type="date"
+			not-null="false"
+			length="10"
+		/>
+		<property
+			name="Nom"
+			column="Nom"
+			type="string"
+			not-null="false"
+			length="45"
+		/>
+		<property
+			name="DateUpdate"
+			column="DateUpdate"
+			type="date"
+			not-null="false"
+			length="10"
+		/>
+		<property
+			name="Email"
+			column="Email"
+			type="string"
+			not-null="false"
+			length="45"
+		/>
+		<property
+			name="Telephone"
+			column="Telephone"
+			type="string"
+			not-null="false"
+			length="12"
+		/>
+		<property
+			name="Prenom"
+			column="Prenom"
+			type="string"
+			not-null="false"
+			length="45"
+		/>
+		<property
+			name="DateCreate"
+			column="DateCreate"
+			type="date"
+			not-null="false"
+			length="10"
+		/>
+
+		<set inverse="true" name="VoitureSet">
+			<key column="UtilisateurID" />
+			<one-to-many class="Voiture" />
+		</set>
+
+		<set inverse="true" name="AnnonceSet">
+			<key column="UtilisateurID" />
+			<one-to-many class="Annonce" />
+		</set>
+
+		<set inverse="true" name="AnnonceUtilisateurSet">
+			<key column="UtilisateurID" />
+			<one-to-many class="AnnonceUtilisateur" />
+		</set>
+
+		<set inverse="true" name="CompteSet">
+			<key column="UtilisateurID" />
+			<one-to-many class="Compte" />
+		</set>
+
+
+
+	</class>
+</hibernate-mapping>

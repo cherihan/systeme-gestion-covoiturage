@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+
+<hibernate-mapping package="com.covoiturage">
+	<class
+		name="Adresse"
+		table="adresse"
+	>
+		<id
+			name="AdresseID"
+			type="integer"
+			column="AdresseID"
+		>
+			<generator class="identity"/>
+		</id>
+
+		<property
+			name="VilleID"
+			column="VilleID"
+			type="com.covoiturage.Ville"
+			not-null="true"
+		/>
+
+		<set inverse="true" name="PointrencontreSet">
+			<key column="AdresseID" />
+			<one-to-many class="Pointrencontre" />
+		</set>
+
+
+
+	</class>
+</hibernate-mapping>

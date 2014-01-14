@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+
+<hibernate-mapping package="com.covoiturage">
+	<class
+		name="Commune"
+		table="commune"
+	>
+		<id
+			name="CommuneID"
+			type="integer"
+			column="CommuneID"
+		>
+			<generator class="identity"/>
+		</id>
+
+		<property
+			name="Nom"
+			column="Nom"
+			type="string"
+			not-null="false"
+			length="100"
+		/>
+
+		<many-to-one
+			name="DistrictID"
+			class="District"
+			not-null="true"
+		>
+			<column name="DistrictID"/>
+		</many-to-one>
+
+		<set inverse="true" name="RueSet">
+			<key column="CommuneID" />
+			<one-to-many class="Rue" />
+		</set>
+
+
+
+	</class>
+</hibernate-mapping>
