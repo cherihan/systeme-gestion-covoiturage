@@ -1,0 +1,7 @@
+Projet Génie logiciel:
+On va construire deux parties:
+Frontend: c'est pour des utilisateurs
+les fonctions:
+Dans le fichier: Tree technique for visualize requirements
+Backend: c'est pour l'administrateur
+les fonctions que gèrent les bases données et l'autres informations.
