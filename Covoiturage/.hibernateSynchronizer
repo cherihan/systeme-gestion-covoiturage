@@ -1,0 +1,5 @@
+package=com.covoiturage
+databaseUrl=jdbc:mysql://localhost:6789/covoiturage
+driver=com.mysql.jdbc.Driver
+ConfigurationFile=\Covoiturage\src\com\configuration\hibernate.cfg.xml
+username=root

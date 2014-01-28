@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+
+<hibernate-mapping package="com.covoiturage">
+	<class
+		name="Annonce"
+		table="annonce"
+	>
+		<id
+			name="AnnonceID"
+			type="integer"
+			column="AnnonceID"
+		>
+			<generator class="identity"/>
+		</id>
+
+		<property
+			name="DateUpdate"
+			column="DateUpdate"
+			type="date"
+			not-null="false"
+			length="10"
+		/>
+		<property
+			name="Description"
+			column="Description"
+			type="string"
+			not-null="false"
+		/>
+		<property
+			name="DateDepart"
+			column="DateDepart"
+			type="date"
+			not-null="false"
+			length="10"
+		/>
+		<property
+			name="HeureDepart"
+			column="HeureDepart"
+			type="string"
+			not-null="false"
+			length="5"
+		/>
+		<property
+			name="DateArrivee"
+			column="DateArrivee"
+			type="date"
+			not-null="false"
+			length="10"
+		/>
+		<property
+			name="DateCreate"
+			column="DateCreate"
+			type="date"
+			not-null="false"
+			length="10"
+		/>
+		<property
+			name="HeureArrivee"
+			column="HeureArrivee"
+			type="string"
+			not-null="false"
+			length="5"
+		/>
+
+		<many-to-one
+			name="UtilisateurID"
+			class="Utilisateur"
+			not-null="true"
+		>
+			<column name="UtilisateurID"/>
+		</many-to-one>
+
+		<many-to-one
+			name="PointDepartID"
+			class="Pointrencontre"
+			not-null="true"
+		>
+			<column name="PointDepartID"/>
+		</many-to-one>
+
+		<many-to-one
+			name="PointArriveeID"
+			class="Pointrencontre"
+			not-null="true"
+		>
+			<column name="PointArriveeID"/>
+		</many-to-one>
+
+
+
+	<joined-subclass
+		name="AnnonceUtilisateur"
+		table="annonce_utilisateur"
+	>
+		<key column="AnnonceID"/>
+		
+		<many-to-one
+			name="UtilisateurID"
+			class="Utilisateur"
+			not-null="true"
+		>
+			<column name="UtilisateurID"/>
+		</many-to-one>
+
+		<many-to-one
+			name="VoitureID"
+			class="Voiture"
+			not-null="true"
+		>
+			<column name="VoitureID"/>
+		</many-to-one>
+
+
+
+	</joined-subclass>
+	</class>
+</hibernate-mapping>

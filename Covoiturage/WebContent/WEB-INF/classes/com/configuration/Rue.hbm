@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+
+<hibernate-mapping package="com.covoiturage">
+	<class
+		name="Rue"
+		table="rue"
+	>
+		<id
+			name="RueID"
+			type="integer"
+			column="RueID"
+		>
+			<generator class="identity"/>
+		</id>
+
+		<property
+			name="Nom"
+			column="Nom"
+			type="string"
+			not-null="false"
+			length="100"
+		/>
+		<property
+			name="Position"
+			column="Position"
+			type="string"
+			not-null="false"
+			length="100"
+		/>
+
+		<many-to-one
+			name="CommuneID"
+			class="Commune"
+			not-null="true"
+		>
+			<column name="CommuneID"/>
+		</many-to-one>
+
+
+	</class>
+</hibernate-mapping>
