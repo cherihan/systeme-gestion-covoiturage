@@ -1,26 +1,19 @@
-
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <!-- Navigation -->
 <ul id="main-nav">
-	<li><a href="/admin/accueil"> Accueil </a></li>
-
-
-	<li><a href="#"> Annonce </a>
-
-		<ul>
-			<li><a href="#">Gestion d'annonce</a></li>
-			<li><a href="#">Gestion de pointe de rencontre</a></li>
-		</ul></li>
-
-	<li><a href="#" class="current"> Utlisateur </a>
-
-		<ul>
-			<li><a href="#">Gestion d'utilisateur</a></li>
-			<li><a href="#" class="current">Gestion de voiture</a></li>
-			<li><a href="#">Gestion de compte</a></li>
-		</ul></li>
-	<li><a href="#"> Adresse </a>
-
-		<ul>
-			<li><a href="#">Gestion de ville</a></li>
-		</ul></li>
+	<c:forEach items="${admenu}" var="admenu">
+		<li><a href="${admenu.item.url}" class="${admenu.item.isCurrent}">
+				${admenu.item.name} </a>
+		<c:if test="${!empty admenu.enfants}">
+			<ul>
+				<c:forEach items="${admenu.enfants}" var="admenuenfant">
+					<li><a href="${admenuenfant.url}"
+						class="${admenuenfant.isCurrent}"> ${admenuenfant.name} </a></li>
+				</c:forEach>
+			</ul>
+		</c:if>
+		</li>
+	</c:forEach>
 </ul>

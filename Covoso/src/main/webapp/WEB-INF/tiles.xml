@@ -32,6 +32,11 @@
 		<put-attribute name="title" value="Solution Covoiturage" />
 		<put-attribute name="body" value="/WEB-INF/jsp/vosannonces.jsp" />
 	</definition>
+		<definition name="uinscription" extends="base.login">
+		<put-attribute name="title" value="Solution Covoiturage" />
+		<put-attribute name="body" value="/WEB-INF/jsp/utilisateurinscription.jsp" />
+	</definition>
+	
 
 
 	<definition name="base.login" template="/WEB-INF/tiles/layoutlogin.jsp">
@@ -53,35 +58,65 @@
 		<put-attribute name="title" value="Solution Covoiturage" />
 		<put-attribute name="body" value="/WEB-INF/jsp/inscription.jsp" />
 	</definition>
+	
 	<definition name="base.admin" template="/WEB-INF/tiles/adlayout.jsp">
 		<put-attribute name="title" value="" />
-		<put-attribute name="header" value="/WEB-INF/tiles/header.jsp" />
+		<put-attribute name="header" value="/WEB-INF/tiles/adheader.jsp" />
 		<put-attribute name="menu" value="/WEB-INF/tiles/admenu.jsp" />
 		<put-attribute name="body" value="" />
 		<put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp" />
 	</definition>
+	<definition name="gestion/accueil" extends="base.admin">
+		<put-attribute name="title" value="Solution Covoiturage" />
+		<put-attribute name="body" value="/WEB-INF/jsp/gestion.jsp" />
+	</definition>
 	<definition name="utilisateur/index" extends="base.admin">
 		<put-attribute name="title" value="Solution Covoiturage" />
-		<put-attribute name="body" value="/WEB-INF/jsp/utilisateur.jsp" />
+		<put-attribute name="body" value="/WEB-INF/jsp/adutilisateur.jsp" />
 	</definition>
 	<definition name="utilisateur/add" extends="base.admin">
 		<put-attribute name="title" value="Solution Covoiturage" />
-		<put-attribute name="body" value="/WEB-INF/jsp/utilisateur.jsp" />
+		<put-attribute name="body" value="/WEB-INF/jsp/adutilisateur.jsp" />
 	</definition>
 	<definition name="voiture/index" extends="base.admin">
 		<put-attribute name="title" value="Solution Covoiturage" />
-		<put-attribute name="body" value="/WEB-INF/jsp/voiture.jsp" />
+		<put-attribute name="body" value="/WEB-INF/jsp/advoiture.jsp" />
 	</definition>
 	<definition name="voiture/add" extends="base.admin">
 		<put-attribute name="title" value="Solution Covoiturage" />
-		<put-attribute name="body" value="/WEB-INF/jsp/voiture.jsp" />
+		<put-attribute name="body" value="/WEB-INF/jsp/advoiture.jsp" />
 	</definition>
 	<definition name="compte/index" extends="base.admin">
 		<put-attribute name="title" value="Solution Covoiturage" />
-		<put-attribute name="body" value="/WEB-INF/jsp/compte.jsp" />
+		<put-attribute name="body" value="/WEB-INF/jsp/adcompte.jsp" />
 	</definition>
 	<definition name="compte/add" extends="base.admin">
 		<put-attribute name="title" value="Solution Covoiturage" />
-		<put-attribute name="body" value="/WEB-INF/jsp/compte.jsp" />
+		<put-attribute name="body" value="/WEB-INF/jsp/adcompte.jsp" />
 	</definition>
+	<definition name="ville/index" extends="base.admin">
+		<put-attribute name="title" value="Solution Covoiturage" />
+		<put-attribute name="body" value="/WEB-INF/jsp/adville.jsp" />
+	</definition>
+	<definition name="ville/add" extends="base.admin">
+		<put-attribute name="title" value="Solution Covoiturage" />
+		<put-attribute name="body" value="/WEB-INF/jsp/adville.jsp" />
+	</definition>
+	<definition name="annonce/index" extends="base.admin">
+		<put-attribute name="title" value="Solution Covoiturage" />
+		<put-attribute name="body" value="/WEB-INF/jsp/adannonce.jsp" />
+	</definition>
+	<definition name="annonce/add" extends="base.admin">
+		<put-attribute name="title" value="Solution Covoiturage" />
+		<put-attribute name="body" value="/WEB-INF/jsp/adannonce.jsp" />
+	</definition>
+	<definition name="annonce/inscription" extends="base.admin">
+		<put-attribute name="title" value="Solution Covoiturage" />
+		<put-attribute name="body" value="/WEB-INF/jsp/adinscription.jsp" />
+	</definition>
+	<definition name="annonce/inscriptiondelete" extends="base.admin">
+		<put-attribute name="title" value="Solution Covoiturage" />
+		<put-attribute name="body" value="/WEB-INF/jsp/adinscription.jsp" />
+	</definition>
+	
 </tiles-definitions>

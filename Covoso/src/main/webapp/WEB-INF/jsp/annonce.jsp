@@ -35,7 +35,7 @@
 					<td>${annonce.dateDepart}</td>
 					<td>${annonce.heureDepart}</td>
 					<td>${annonce.prix}</td>
-					<td><a hre="#">Inscription</a></td>
+					<td><a href="/Covoso/uinscription/${annonce.annonceID}">View & Inscription</a></td>
 				</tr>
 				</c:forEach>
 			</table>

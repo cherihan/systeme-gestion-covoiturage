@@ -2,6 +2,7 @@ package net.covoiturage.covoso.controller;
 
 import java.util.Date;
 
+import net.covoiturage.covoso.Utils.MenuBuild;
 import net.covoiturage.covoso.Utils.PagedGenericView;
 import net.covoiturage.covoso.Utils.UtilisateurValidator;
 import net.covoiturage.covoso.form.Utilisateur;
@@ -134,6 +135,7 @@ public class UtilisateurController {
 				.getCurrentPage(), ulist.getNav().getPageSize()));
 
 		mv.addObject("uList", ulist);
+		mv.addObject("admenu", MenuBuild.AdminLogin("Utilisateur"));
 		return mv;
 	}
 }

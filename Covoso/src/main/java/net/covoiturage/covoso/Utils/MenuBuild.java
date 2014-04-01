@@ -31,4 +31,20 @@ public class MenuBuild {
 		}
 		return list;
 	}
+	public static List<MenuItemAdmin> AdminLogin(String nameActive){
+		ArrayList<MenuItemAdmin> list = new ArrayList<MenuItemAdmin>();
+		list.add(new MenuItemAdmin(new MenuItem("/Covoso/gestion/accueil", "Accueil", ""),null));
+		ArrayList<MenuItem> enfantannonce = new ArrayList<MenuItem>();
+		enfantannonce.add(new MenuItem("/Covoso/ville/index", "Ville", ""));
+		list.add(new MenuItemAdmin(new MenuItem("/Covoso/annonce/index", "Annonce", ""),enfantannonce));
+		ArrayList<MenuItem> enfantUtilisateur = new ArrayList<MenuItem>();
+		enfantUtilisateur.add(new MenuItem("/Covoso/voiture/index", "Voiture", ""));
+		enfantUtilisateur.add(new MenuItem("/Covoso/compte/index", "Compte", ""));
+		list.add(new MenuItemAdmin(new MenuItem("/Covoso/utilisateur/index", "Utilisateur", ""),enfantUtilisateur));
+		for (MenuItemAdmin menuItem : list) {
+			if (menuItem.getItem().getName().toLowerCase().compareTo(nameActive.toLowerCase()) == 0)
+				menuItem.getItem().setIsCurrent("current");
+		}
+		return list;
+	}
 }

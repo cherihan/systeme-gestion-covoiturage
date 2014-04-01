@@ -1,6 +1,7 @@
 package net.covoiturage.covoso.controller;
 
 import java.util.Date;
+
 import javax.servlet.http.HttpSession;
 
 import net.covoiturage.covoso.Utils.AnnonceValidator;
@@ -11,9 +12,11 @@ import net.covoiturage.covoso.Utils.PagedGenericView;
 import net.covoiturage.covoso.Utils.UtilisateuretCompteValidator;
 import net.covoiturage.covoso.form.Annonce;
 import net.covoiturage.covoso.form.Compte;
+import net.covoiturage.covoso.form.Inscription;
 import net.covoiturage.covoso.form.Utilisateur;
 import net.covoiturage.covoso.form.UtilisateuretCompte;
-
+import net.covoiturage.covoso.form.Ville;
+import net.covoiturage.covoso.form.Voiture;
 import net.covoiturage.covoso.service.AnnonceService;
 import net.covoiturage.covoso.service.CompteService;
 import net.covoiturage.covoso.service.UtilisateurService;
@@ -31,7 +34,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@SessionAttributes({ "utilisateur", "compte", "isAdmin" })
+@SessionAttributes({ "utilisateur", "compte", "admin" })
 public class AccueilController {
 
 	@Autowired
@@ -64,6 +67,7 @@ public class AccueilController {
 						.ApresLogin("accueil"));
 		return mv;
 	}
+
 	@RequestMapping("/accueil/{index}")
 	public ModelAndView accueil(@PathVariable("index") Integer index) {
 		ModelAndView mv = new ModelAndView("annonce");
@@ -82,6 +86,7 @@ public class AccueilController {
 		mv.addObject("aList", alist);
 		return mv;
 	}
+
 	// 4. Recherche des covoiturages
 	@RequestMapping("/recherche")
 	public ModelAndView recherche(ModelMap map) {
@@ -95,21 +100,22 @@ public class AccueilController {
 						.ApresLogin("recherche"));
 		return mv;
 	}
-	@RequestMapping(value="/recherche", method = RequestMethod.POST)
+
+	@RequestMapping(value = "/recherche", method = RequestMethod.POST)
 	public ModelAndView recherche(@ModelAttribute("recherche") Annonce rc,
 			BindingResult result, ModelMap map) {
 		ModelAndView mv = new ModelAndView("recherche");
-		
-		//recherche 
+
+		// recherche
 		PagedGenericView<Annonce> alist = new PagedGenericView<Annonce>();
 		alist.getNav().setRowCount(annonceService.countAnnonceFind(rc));
 
 		alist.getNav().setCurrentPage(1);
-		alist.setEntities(annonceService.listAnnonceFind(rc,alist.getNav()
+		alist.setEntities(annonceService.listAnnonceFind(rc, alist.getNav()
 				.getCurrentPage(), alist.getNav().getPageSize()));
 
 		mv.addObject("aList", alist);
-		mv.addObject("display","true");
+		mv.addObject("display", "true");
 		mv.addObject("recherchebox", rc);
 		mv.addObject("listVille", annonceService.allVille());
 		mv.addObject(
@@ -188,8 +194,7 @@ public class AccueilController {
 		mv.addObject("listVille", annonceService.allVille());
 		mv.addObject("listVoiture", voitureService.all());
 		mv.addObject("listHeure", CovosoUtils.HeureDepartDefault());
-		
-		
+
 		return mv;
 	}
 
@@ -198,11 +203,14 @@ public class AccueilController {
 	public ModelAndView annoncelist(ModelMap map) {
 		ModelAndView mv = new ModelAndView("vosannonces");
 		PagedGenericView<Annonce> alist = new PagedGenericView<Annonce>();
-		alist.getNav().setRowCount(annonceService.countAnnonceFindbyUtilisateur((Utilisateur) map.get("utilisateur")));
+		alist.getNav().setRowCount(
+				annonceService.countAnnonceFindbyUtilisateur((Utilisateur) map
+						.get("utilisateur")));
 
 		alist.getNav().setCurrentPage(1);
-		alist.setEntities(annonceService.listAnnonceFindbyUtilisateur((Utilisateur) map.get("utilisateur"),alist.getNav()
-				.getCurrentPage(), alist.getNav().getPageSize()));
+		alist.setEntities(annonceService.listAnnonceFindbyUtilisateur(
+				(Utilisateur) map.get("utilisateur"), alist.getNav()
+						.getCurrentPage(), alist.getNav().getPageSize()));
 
 		mv.addObject("aList", alist);
 		mv.addObject("menu", MenuBuild.ApresLogin("vos annonces"));
@@ -210,40 +218,122 @@ public class AccueilController {
 	}
 
 	@RequestMapping("/vosannonces/{index}")
-	public ModelAndView annoncelist(@PathVariable("index") Integer index,ModelMap map) {
+	public ModelAndView annoncelist(@PathVariable("index") Integer index,
+			ModelMap map) {
 		ModelAndView mv = new ModelAndView("vosannonces");
 		PagedGenericView<Annonce> alist = new PagedGenericView<Annonce>();
 
-		alist.getNav().setRowCount(annonceService.countAnnonceFindbyUtilisateur((Utilisateur) map.get("utilisateur")));
+		alist.getNav().setRowCount(
+				annonceService.countAnnonceFindbyUtilisateur((Utilisateur) map
+						.get("utilisateur")));
 
 		if (index == null || index < 1)
 			alist.getNav().setCurrentPage(1);
 		else
 			alist.getNav().setCurrentPage(index);
 
-		alist.setEntities(annonceService.listAnnonceFindbyUtilisateur((Utilisateur) map.get("utilisateur"),alist.getNav()
-				.getCurrentPage(), alist.getNav().getPageSize()));
+		alist.setEntities(annonceService.listAnnonceFindbyUtilisateur(
+				(Utilisateur) map.get("utilisateur"), alist.getNav()
+						.getCurrentPage(), alist.getNav().getPageSize()));
 
 		mv.addObject("aList", alist);
 		mv.addObject("menu", MenuBuild.ApresLogin("vos annonces"));
 		return mv;
 	}
+
 	// 7. Modifier compte
 	@RequestMapping("/votrecompte")
 	public ModelAndView votrecompte(ModelMap map) {
-		if(map.get("utilisateur")!=null){
-		ModelAndView mv = new ModelAndView("votrecompte");
-		UtilisateuretCompte uc = new UtilisateuretCompte();
-		uc.setCompte((Compte)map.get("compte"));
-		uc.setUtilisateur((Utilisateur)map.get("utilisateur"));
-		mv.addObject("uc", uc);
-		mv.addObject("listVoiture", voitureService.find(((Utilisateur)map.get("utilisateur")).getUtilisateurID()));
-		mv.addObject("menu",MenuBuild.ApresLogin("votre compte"));
-		return mv;
-		}
-		else
+		if (map.get("utilisateur") != null) {
+			ModelAndView mv = new ModelAndView("votrecompte");
+			UtilisateuretCompte uc = new UtilisateuretCompte();
+			uc.setCompte((Compte) map.get("compte"));
+			uc.setUtilisateur((Utilisateur) map.get("utilisateur"));
+			mv.addObject("uc", uc);
+			mv.addObject("listVoiture", voitureService.find(((Utilisateur) map
+					.get("utilisateur")).getUtilisateurID()));
+			mv.addObject("menu", MenuBuild.ApresLogin("votre compte"));
+			return mv;
+		} else
 			return new ModelAndView("redirect:/");
 	}
+
+	// 8 Utilisateur inscrit un covoiturage
+	@RequestMapping("/uinscription/{annonceID}")
+	public ModelAndView utilisateurInscriptionePage(
+			@PathVariable("annonceID") Long annonceID, ModelMap map) {
+		if (map.get("utilisateur") != null) {
+			ModelAndView mv = new ModelAndView("uinscription");
+			Inscription ins = new Inscription();
+			ins.setAnnonceID(annonceID);
+			ins.setUtilisateurID((Integer) map.get("utilisateurID"));
+			mv.addObject("inscription", ins);
+			Annonce annonce = annonceService.singleAnnonce(annonceID);
+			Utilisateur auteurs = utilisateurService.single(annonce
+					.getUtilisateurID());
+			Ville depart = annonceService.singleVille(annonce.getVilleDepart());
+			Ville arrivee = annonceService.singleVille(annonce
+					.getVilleArrivee());
+			Voiture voiture = voitureService.single(annonce.getVoitureID()
+					.intValue());
+			mv.addObject("utilisateur", auteurs);
+			mv.addObject("annonce", annonce);
+			mv.addObject("villeArrivee", arrivee);
+			mv.addObject("villeDepart", depart);
+			mv.addObject("voiture", voiture);
+			mv.addObject("action","/Covoso/uinscription/"+annonceID);
+			mv.addObject("menu", MenuBuild.ApresLogin("votre compte"));
+
+			return mv;
+		} else
+			return new ModelAndView("redirect:/login");
+	}
+	@RequestMapping(value="/uinscription/{annonceID}",method=RequestMethod.POST)
+	public ModelAndView utilisateurInscriptione(@ModelAttribute("inscription") Inscription an,
+			@PathVariable("annonceID") Long annonceID,  ModelMap map) {
+		if (map.get("utilisateur") != null) {
+			ModelAndView mv = new ModelAndView("uinscription");
+			Annonce annonce = annonceService.singleAnnonce(annonceID);
+			Inscription ins = new Inscription();
+			ins.setAnnonceID(annonceID);
+			ins.setUtilisateurID((Integer) map.get("utilisateurID"));
+			ins.setDateInscription(new Date());
+			ins.setConfirmer(0);
+			
+			ins.setNombrePlace(an.getNombrePlace());
+			if(ins.getNombrePlace()<0||ins.getNombrePlace()> annonce.getNombrePlace())
+			{
+				mv.addObject("message", "Impossible le nombre place");
+			}
+			else if(annonceService.hasInscription(annonceID, ins.getUtilisateurID())){
+				mv.addObject("message", "Vous avez deja inscrit cette covoiturage");
+			}
+			else{
+				
+				annonceService.createInscription(ins);
+				mv.addObject("message", "Inscription de covoiturage reussi");
+			}	
+			mv.addObject("inscription", ins);
+			Utilisateur auteurs = utilisateurService.single(annonce
+					.getUtilisateurID());
+			Ville depart = annonceService.singleVille(annonce.getVilleDepart());
+			Ville arrivee = annonceService.singleVille(annonce
+					.getVilleArrivee());
+			Voiture voiture = voitureService.single(annonce.getVoitureID()
+					.intValue());
+			mv.addObject("utilisateur", auteurs);
+			mv.addObject("annonce", annonce);
+			mv.addObject("villeArrivee", arrivee);
+			mv.addObject("villeDepart", depart);
+			mv.addObject("voiture", voiture);
+			mv.addObject("action","/Covoso/uinscription/"+annonceID);
+			mv.addObject("menu", MenuBuild.ApresLogin("votre compte"));
+
+			return mv;
+		} else
+			return new ModelAndView("redirect:/login");
+	}
+
 	// 1. Login
 	@RequestMapping("/login")
 	public ModelAndView login(ModelMap map) {
@@ -268,7 +358,6 @@ public class AccueilController {
 		valid.validate(compte, result);
 		String message = "";
 		Compte newcompte = new Compte();
-		;
 		ModelAndView mv = new ModelAndView("login");
 		if (result.hasErrors()) {
 			message = "Les donnees incorrectes";
@@ -283,7 +372,9 @@ public class AccueilController {
 				map.addAttribute("utilisateur",
 						utilisateurService.single(newcompte.getUtilisateurid()));
 				map.addAttribute("compte", newcompte);
-				// map.addAttribute("isAdmin").clear();
+				if (newcompte.getType().compareTo("admin") == 0) {
+					map.addAttribute("admin", newcompte);
+				}
 				return new ModelAndView("redirect:/");
 			} else {
 				message = "Compte n'existe pas";
@@ -300,17 +391,17 @@ public class AccueilController {
 	public String logout(ModelMap map, HttpSession session) {
 		map.remove("utilisateur");
 		map.remove("compte");
-		map.remove("isAdmin");
+		map.remove("admin");
 		session.removeAttribute("utilisateur");
 		session.removeAttribute("compte");
-		session.removeAttribute("isAdmin");
+		session.removeAttribute("admin");
 		return "redirect:/";
 	}
 
 	// Page d'introduction de notre groupe
 	@RequestMapping("/about")
 	public ModelAndView about(ModelMap map) {
-		
+
 		if (map.get("utilisateur") == null) {
 			ModelAndView mv = new ModelAndView("about");
 			mv.addObject("recherchebox", new Annonce());

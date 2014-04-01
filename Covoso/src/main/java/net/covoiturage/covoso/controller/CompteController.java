@@ -1,6 +1,7 @@
 package net.covoiturage.covoso.controller;
 
 import net.covoiturage.covoso.Utils.CompteValidator;
+import net.covoiturage.covoso.Utils.MenuBuild;
 import net.covoiturage.covoso.Utils.PagedGenericView;
 import net.covoiturage.covoso.form.Compte;
 import net.covoiturage.covoso.service.CompteService;
@@ -124,6 +125,7 @@ public class CompteController {
 				ulist.getNav().getPageSize()));
 
 		mv.addObject("uList", ulist);
+		mv.addObject("admenu", MenuBuild.AdminLogin("Utilisateur"));
 		return mv;
 	}
 }

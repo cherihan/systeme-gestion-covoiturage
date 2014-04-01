@@ -1,5 +1,6 @@
 package net.covoiturage.covoso.controller;
 
+import net.covoiturage.covoso.Utils.MenuBuild;
 import net.covoiturage.covoso.Utils.PagedGenericView;
 import net.covoiturage.covoso.Utils.VoitureValidator;
 import net.covoiturage.covoso.form.Voiture;
@@ -124,6 +125,7 @@ public class VoitureController {
 				ulist.getNav().getPageSize()));
 
 		mv.addObject("uList", ulist);
+		mv.addObject("admenu", MenuBuild.AdminLogin("Utilisateur"));
 		return mv;
 	}
 }

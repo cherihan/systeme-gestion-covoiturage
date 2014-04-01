@@ -1,5 +1,6 @@
 package net.covoiturage.covoso.Utils;
 
+
 public class MenuItem {
 	String url;
 	String name;

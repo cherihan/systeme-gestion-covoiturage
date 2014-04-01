@@ -5,10 +5,11 @@
 	<c:if test="${!empty sessionScope.utilisateur}">
 		<a style="color: white">${sessionScope.utilisateur.nom}
 			${sessionScope.utilisateur.prenom}</a>
-		<a href="/Covoso/logout">logout</a>
 
+		<c:if test="${!empty sessionScope.admin}">
+			<a href="/Covoso/gestion/accueil">Admin page</a>
+		</c:if>
+		<a href="/Covoso/logout">logout</a>
 	</c:if>
-	<c:if test="${!empty sessionScope.isAdmin}">
-		<a href="/Covoso/admin">Admin page</a>
-	</c:if>
+
 </div>
