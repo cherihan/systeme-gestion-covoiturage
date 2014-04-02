@@ -69,8 +69,10 @@ public class AccueilController {
 	}
 
 	@RequestMapping("/accueil/{index}")
-	public ModelAndView accueil(@PathVariable("index") Integer index) {
-		ModelAndView mv = new ModelAndView("annonce");
+	public ModelAndView accueil(@PathVariable("index") Integer index,ModelMap map) {
+		ModelAndView mv = new ModelAndView("accueil");
+		mv.addObject("recherchebox", new Annonce());
+		mv.addObject("listVille", annonceService.allVille());
 		PagedGenericView<Annonce> alist = new PagedGenericView<Annonce>();
 
 		alist.getNav().setRowCount(annonceService.countAnnonce());
@@ -84,6 +86,11 @@ public class AccueilController {
 				.getCurrentPage(), alist.getNav().getPageSize()));
 
 		mv.addObject("aList", alist);
+		mv.addObject(
+				"menu",
+				map.get("utilisateur") == null ? MenuBuild
+						.AvantLogin("accueil") : MenuBuild
+						.ApresLogin("accueil"));
 		return mv;
 	}
 
@@ -107,14 +114,17 @@ public class AccueilController {
 		ModelAndView mv = new ModelAndView("recherche");
 
 		// recherche
+		/*
 		PagedGenericView<Annonce> alist = new PagedGenericView<Annonce>();
 		alist.getNav().setRowCount(annonceService.countAnnonceFind(rc));
 
 		alist.getNav().setCurrentPage(1);
 		alist.setEntities(annonceService.listAnnonceFind(rc, alist.getNav()
 				.getCurrentPage(), alist.getNav().getPageSize()));
-
-		mv.addObject("aList", alist);
+mv.addObject("aList", alist);
+*/
+		mv.addObject("result", annonceService.listAnnonceFindAll(rc) );
+		
 		mv.addObject("display", "true");
 		mv.addObject("recherchebox", rc);
 		mv.addObject("listVille", annonceService.allVille());

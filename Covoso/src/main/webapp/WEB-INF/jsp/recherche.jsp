@@ -10,12 +10,12 @@
 
 		<div class="content-box-content">
 			<h3>Liste d'annonce</h3>
-			<c:if test="${empty aList.entities}">
+			<c:if test="${empty result}">
 				<div class="notification information">Existe ces informations
 					dans base de donnees</div>
 			</c:if>
 
-			<c:if test="${!empty aList.entities}">
+			<c:if test="${!empty result}">
 				<div class="content-box-content">
 					<table>
 						<tr>
@@ -30,7 +30,7 @@
 							<th>Prix</th>
 							<th>Details</th>
 						</tr>
-						<c:forEach items="${aList.entities}" var="annonce">
+						<c:forEach items="${result}" var="annonce">
 							<tr>
 								<td>${annonce.villeDepartNom}</td>
 								<td>${annonce.endroitDepart}</td>
@@ -46,7 +46,7 @@
 						</c:forEach>
 					</table>
 				</div>
-				<div align="center">
+				<!-- <div align="center">
 					<c:if test="${!aList.nav.firstPage}">
 						<a href="/Covoso/accueil/index">First</a>&nbsp;
 			</c:if>
@@ -63,7 +63,7 @@
 					<c:if test="${!aList.nav.lastPage}">
 						<a href="/Covoso/accueil/index/${aList.nav.pageCount}">Last</a>
 					</c:if>
-				</div>
+				</div>-->
 			</c:if>
 
 		</div>

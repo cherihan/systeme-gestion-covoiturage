@@ -8,7 +8,9 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.LogicalExpression;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
+import org.hibernate.metadata.ClassMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +20,6 @@ public class GenericDaoImpl<E, K extends Serializable> implements
 		GenericDao<E, K> {
 	private SessionFactory sessionFactory;
 	protected Class<? extends E> daoType;
-
 	public GenericDaoImpl() {
 		daoType = (Class<E>) ((ParameterizedType) getClass()
 				.getGenericSuperclass()).getActualTypeArguments()[0];
@@ -55,7 +56,7 @@ public class GenericDaoImpl<E, K extends Serializable> implements
 	}
 
 	public List<E> list() {
-		return currentSession().createCriteria(daoType).list();
+		return currentSession().createCriteria(daoType).addOrder(Order.desc(daoType.getDeclaredFields()[0].getName())).list();
 	}
 
 	public int count() {
@@ -70,6 +71,7 @@ public class GenericDaoImpl<E, K extends Serializable> implements
 			--startpage;
 		int firsResult = startpage * pagesize;
 		Criteria criteria = currentSession().createCriteria(daoType);
+		criteria.addOrder(Order.desc(daoType.getDeclaredFields()[0].getName()));
 		criteria.setFirstResult(firsResult);
 		criteria.setMaxResults(pagesize);
 		return criteria.list();
@@ -78,6 +80,7 @@ public class GenericDaoImpl<E, K extends Serializable> implements
 	public List<E> find(LogicalExpression le) {
 		Criteria criteria = currentSession().createCriteria(daoType);
 		criteria.add(le);
+		criteria.addOrder(Order.desc(daoType.getDeclaredFields()[0].getName()));
 		return criteria.list();
 	}
 }

@@ -22,11 +22,13 @@
 							<spring:message code="label.villeDepart" />
 						</form:label>
 					</span> <br />
-					<form:select path="villeArrivee">
-								<form:options items="${listVille}"  itemLabel="Nom" itemValue="VilleID"/>
-							</form:select>
+					<form:select path="villeDepart">
+						<form:options items="${listVille}" itemLabel="Nom"
+							itemValue="VilleID" />
+					</form:select>
 				</div>
 				<div>
+					
 					<span> <form:label path="endroitArrivee">
 							<spring:message code="label.endroitArrivee" />
 						</form:label>
@@ -37,22 +39,35 @@
 						</form:label>
 					</span> <br />
 					<form:select path="villeArrivee">
-								<form:options items="${listVille}"  itemLabel="Nom" itemValue="VilleID"/>
-							</form:select>
+						<form:options items="${listVille}" itemLabel="Nom"
+							itemValue="VilleID" />
+					</form:select>
 				</div>
 				<div style="display: block; position: relative">
 					<span> <form:label path="dateDepart">
 							<spring:message code="label.dateDepart" />
 						</form:label>
+						<script>
+						$('document')
+								.ready(
+										function() {
+
+											$('.dg').datepicker({
+												showAnim : 'fadeIn'
+											});
+											$('.dg').css("padding-left","30px")
+													.after(
+															'<img class="datepickericon" src="<c:url value="/resources/images/icons/calendar.png"/>" alt="calendar" />');
+										});
+					</script>
 					</span> <br />
-					<form:input path="dateDepart" style="width:115px;"
-						class="datepicker" />
-						<br/>
-						<span> <form:label path="heureDepart">
+					<form:input path="dateDepart" style="width:90px;"
+						class="dg" />
+					<br /> <span> <form:label path="heureDepart">
 							<spring:message code="label.heureDepart" />
 						</form:label>
 					</span> <br />
-					<form:input path="heureDepart" style="width:115px;"/>
+					<form:input path="heureDepart" style="width:115px;" />
 				</div>
 				<div>
 					<input type="submit" style="margin-top: 75px;"

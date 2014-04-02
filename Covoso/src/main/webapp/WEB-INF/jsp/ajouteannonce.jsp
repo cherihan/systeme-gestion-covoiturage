@@ -66,7 +66,7 @@
 						<td><form:label path="dateDepart">
 								<spring:message code="label.dateDepart" />
 							</form:label></td>
-						<td><form:input path="dateDepart"   class="datepickers" /></td>
+						<td><form:input path="dateDepart" class="datepickeraaa" /></td>
 					</tr>
 
 					<tr>
@@ -124,12 +124,8 @@
 </div>
 <script>
 	$('document').ready(function() {
-		// Datepicker
-
-		$('.datepickers').datepicker({
+		$('.datepickeraaa').datepicker({
 			showAnim : 'fadeIn'
 		});
-		//$('.datepickers').after('<img class="datepickericon" src="../resources/images/icons/calendar.png" alt="calendar" />');
-
 	});
 </script>

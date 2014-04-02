@@ -42,12 +42,12 @@
 		</div>
 		<div align="center">
 			<c:if test="${!aList.nav.firstPage}">
-				<a href="/Covoso/accueil/index">First</a>&nbsp;
+				<a href="/Covoso/">First</a>&nbsp;
 			</c:if>
 			<c:forEach var="i" items="${aList.nav.indexList}">
 				<c:choose>
 					<c:when test="${i != aList.nav.currentPage}">
-						<a href="/Covoso/accueil/index/${i}">${i}</a>&nbsp;
+						<a href="/Covoso/accueil/${i}">${i}</a>&nbsp;
 					</c:when>
 					<c:otherwise>
 						<b>${i}</b>&nbsp;
@@ -55,7 +55,7 @@
 				</c:choose>
 			</c:forEach>
 			<c:if test="${!aList.nav.lastPage}">
-				<a href="/Covoso/accueil/index/${aList.nav.pageCount}">Last</a>
+				<a href="/Covoso/accueil/${aList.nav.pageCount}">Last</a>
 			</c:if>
 		</div>
 	</div>

@@ -78,5 +78,5 @@ public interface AnnonceService {
 	List<Inscription> findbyUtilisateur(Integer utilisateurID);
 	
 	Boolean hasInscription(Long annonceID, Integer utilisateurID);
-	//
+	List<Annonce>  listAnnonceFindAll(Annonce rc);
 }

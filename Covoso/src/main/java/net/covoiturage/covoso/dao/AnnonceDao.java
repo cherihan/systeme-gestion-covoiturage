@@ -13,4 +13,5 @@ public interface AnnonceDao extends GenericDao<Annonce, Long> {
 	List<Annonce> listAnnonceFind(Annonce rc, int startpage, int pagesize);
 	int countAnnonceFindbyUtilisateur(Utilisateur us);
 	List<Annonce> listAnnonceFindbyUtilisateur(Utilisateur us, int startpage, int pagesize);
+	List<Annonce>  listAnnonceFindAll(Annonce rc);
 }

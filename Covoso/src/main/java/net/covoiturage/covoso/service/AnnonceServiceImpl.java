@@ -35,7 +35,12 @@ public class AnnonceServiceImpl implements AnnonceService {
 
 	@Transactional
 	public List<Annonce> allAnnonce() {
-		return aDao.list();
+		List<Annonce> result =  aDao.list();
+		for (int i=0;i<result.size();i++) {
+			result.get(i).setVilleArriveeNom(vDao.single(result.get(i).getVilleArrivee()).getNom());
+			result.get(i).setVilleDepartNom(vDao.single(result.get(i).getVilleDepart()).getNom());
+		}
+		return result;
 	}
 
 	@Transactional
@@ -209,5 +214,14 @@ public class AnnonceServiceImpl implements AnnonceService {
 		Criterion id = Restrictions.eq("annonceID", annonceID);
 		LogicalExpression le = Restrictions.and(id,e);
 		return iDao.find(le).size()==0?false:true;
+	}
+
+	public List<Annonce> listAnnonceFindAll(Annonce rc) {
+		List<Annonce> result =  aDao.listAnnonceFindAll(rc);
+		for (int i=0;i<result.size();i++) {
+			result.get(i).setVilleArriveeNom(vDao.single(result.get(i).getVilleArrivee()).getNom());
+			result.get(i).setVilleDepartNom(vDao.single(result.get(i).getVilleDepart()).getNom());
+		}
+		return result;
 	}
 }
