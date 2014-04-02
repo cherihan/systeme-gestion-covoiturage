@@ -12,7 +12,9 @@ public interface CompteService {
 	void update(Compte entity);
 
 	Compte single(String login);
-
+	
+	Compte FindByLogin(String login);
+	
 	void remove(String login);
 
 	void delete(Compte entity);
@@ -22,4 +24,6 @@ public interface CompteService {
 	List<Compte> all(int page, int pagesize);
 	
 	Compte login(String login, String pass);
+	
+	
 }

@@ -48,18 +48,29 @@ public class CompteServiceImpl implements CompteService {
 	public void update(Compte entity) {
 		udao.update(entity);
 	}
-
+	@Transactional
 	public int count() {
 		return udao.count();
 	}
-
+	@Transactional
 	public List<Compte> all(int page, int pagesize) {
 		return udao.list(page, pagesize);
 	}
-
+	@Transactional
 	public Compte login(String login, String pass) {
 		Criterion l = Restrictions.eq("login", login);
 		Criterion p = Restrictions.eq("password", pass);
+		LogicalExpression le = Restrictions.and(l, p);
+		List<Compte> ls = udao.find(le);
+		if (ls.size() > 0)
+			return ls.get(0);
+		else
+			return null;
+	}
+	@Transactional
+	public Compte FindByLogin(String login) {
+		Criterion l = Restrictions.eq("login", login);
+		Criterion p = Restrictions.gt("utilisateurID", 0);
 		LogicalExpression le = Restrictions.and(l, p);
 		List<Compte> ls = udao.find(le);
 		if (ls.size() > 0)

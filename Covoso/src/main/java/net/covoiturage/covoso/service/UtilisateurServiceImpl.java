@@ -67,15 +67,15 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 	public void update(Utilisateur user) {
 		udao.update(user);
 	}
-
+	@Transactional
 	public int count() {
 		return udao.count();
 	}
-
+	@Transactional
 	public List<Utilisateur> all(int page, int pagesize) {
 		return udao.list(page, pagesize);
 	}
-
+	@Transactional
 	public void addUtilisateuretCompte(UtilisateuretCompte uc) {
 		Utilisateur us = new Utilisateur();
 		us.setNom(uc.getUtilisateur().getNom());
@@ -101,7 +101,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 		cp.setUtilisateurid(us.getUtilisateurID());
 		cdao.add(cp);
 	}
-
+	@Transactional
 	public Utilisateur findEmail(String email) {
 		Criterion e = Restrictions.like("email", email);
 		Criterion id = Restrictions.gt("utilisateurid", 0);

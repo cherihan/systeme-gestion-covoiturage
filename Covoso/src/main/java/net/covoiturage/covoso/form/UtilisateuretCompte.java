@@ -1,6 +1,7 @@
 package net.covoiturage.covoso.form;
 
 public class UtilisateuretCompte {
+	
 	private Utilisateur utilisateur;
 	private Compte compte;
 

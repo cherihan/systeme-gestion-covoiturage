@@ -12,8 +12,6 @@ public class LoginValidator implements Validator {
 		return Compte.class.equals(clazz);
 	}
 
-	CompteService cService;
-
 	public void validate(Object target, Errors errors) {
 		Compte entity = (Compte) target;
 

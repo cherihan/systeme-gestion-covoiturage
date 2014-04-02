@@ -12,7 +12,6 @@ public class VoitureValidator implements Validator {
 		return Voiture.class.equals(clazz);
 	}
 
-	VoitureService cService;
 
 	public void validate(Object target, Errors errors) {
 		Voiture entity = (Voiture) target;
