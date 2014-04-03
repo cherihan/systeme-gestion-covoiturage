@@ -74,24 +74,6 @@ public class AnnonceDaoImpl extends GenericDaoImpl<Annonce, Long> implements
 			query.setParameter("dateDepart", rc.getDateDepart());
 		if (isPara6)
 			query.setParameter("heureDepart", rc.getHeureDepart());
-		/*
-		 * if (rc.getEndroitDepart() != null && rc.getEndroitArrivee() != null
-		 * && rc.getDateDepart() != null && rc.getHeureDepart() != null) { query
-		 * = currentSession().createQuery( "from Annonce where " +
-		 * "endroitdepart like :endroitDepart" + " and " +
-		 * "endroitarrivee like :endroitArrivee " + " and " +
-		 * "dateDepart like :dateDepart " + " and " +
-		 * "villedepart = :villeDepart" + " and " +
-		 * "villeArrivee = :villeArrivee " + " and " +
-		 * "heureDepart = :heureDepart"); query.setParameter("endroitDepart",
-		 * rc.getEndroitDepart()); query.setParameter("endroitArrivee",
-		 * rc.getEndroitArrivee()); query.setParameter("dateDepart",
-		 * rc.getDateDepart()); query.setParameter("villeDepart",
-		 * rc.getVilleDepart()); query.setParameter("villeArrivee",
-		 * rc.getVilleArrivee()); query.setParameter("heureDepart",
-		 * rc.getHeureDepart()); }
-		 */
-
 		return query.list();
 	}
 

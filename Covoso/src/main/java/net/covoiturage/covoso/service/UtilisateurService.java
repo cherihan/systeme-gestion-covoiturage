@@ -16,7 +16,7 @@ public interface UtilisateurService {
 
 	void update(Utilisateur user);
 
-	Utilisateur single(int id);
+	Utilisateur single(Integer id);
 
 	void remove(Integer id);
 
@@ -27,6 +27,6 @@ public interface UtilisateurService {
 	List<Utilisateur> all(int page, int pagesize);
 	
 	void addUtilisateuretCompte(UtilisateuretCompte uc);
-	
+	void updateUtilisateuretCompte(UtilisateuretCompte uc,Utilisateur user);
 	Utilisateur findEmail(String email);
 }

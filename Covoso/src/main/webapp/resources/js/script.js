@@ -15,6 +15,7 @@ $('document').ready(function() {
 	// Datepicker
 	
 		$('.datepicker').datepicker({showAnim: 'fadeIn'});
+		$('.datepicker').datepicker({dateFormat: 'dd/mm/yyyy' });
 		$('.datepicker').after('<img class="datepickericon" src="resources/images/icons/calendar.png" alt="calendar" />');
 		
 	// WYSIWYG

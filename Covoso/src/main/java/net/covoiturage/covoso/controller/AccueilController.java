@@ -162,7 +162,44 @@ public class AccueilController {
 		mv.addObject("menu", MenuBuild.AvantLogin("inscription"));
 		return mv;
 	}
+	// 4. Update utilisateur et compte
+		@RequestMapping("/utilisateurcompteupdate/{utilisateurId}")
+		public ModelAndView utilisateurcompteupdate(@PathVariable("utilisateurId") Integer utilisateurId,
+				ModelMap map) {
+			ModelAndView mv = new ModelAndView("utilisateurcompteupdate");
+			mv.addObject("menu", MenuBuild.AvantLogin("inscription"));
+			UtilisateuretCompte uc = new UtilisateuretCompte();
+			uc.setUtilisateur((Utilisateur) map.get("utilisateur"));
+			uc.setCompte(compteService.findByUtilisateurID(utilisateurId));
+			mv.addObject("uc", uc);
+			mv.addObject("action","/Covoso/utilisateurcompteupdate/"+utilisateurId);
+			mv.addObject("menu", MenuBuild.ApresLogin("votre compte"));
+			return mv;
+		}
 
+		@RequestMapping(value = "/utilisateurcompteupdate/{utilisateurId}", method = RequestMethod.POST)
+		public ModelAndView utilisateurcompteupdate(@PathVariable("utilisateurId") Integer utilisateurId,
+				@ModelAttribute("uc") UtilisateuretCompte uc, BindingResult result,
+				ModelMap map) {
+			ModelAndView mv = new ModelAndView("utilisateurcompteupdate");
+			try {
+				//UtilisateuretCompteValidator ucValid = new UtilisateuretCompteValidator();
+				//ucValid.validate(uc, result);
+				if (uc.getUtilisateur().getEmail()==""||uc.getUtilisateur().getNom()==""||uc.getCompte().getLogin()==""||uc.getCompte().getPassword().length()<6) {
+					mv.addObject("message",
+							"Certains champs manquent des informations ou password > 6");
+				} else {
+					utilisateurService.updateUtilisateuretCompte(uc,(Utilisateur) map.get("utilisateur"));
+					mv.addObject("message", "Inscription reussi");
+				}
+			} catch (Exception e) {
+				mv.addObject("message", "Certains champs manquent des informations - error");
+			}
+			mv.addObject("menu", MenuBuild.ApresLogin("votre compte"));
+			mv.addObject("action","/Covoso/utilisateurcompteupdate/"+utilisateurId);
+			mv.addObject("uc", new UtilisateuretCompte());
+			return mv;
+		}
 	// 5. Ajoute des nouveaux annonces
 	@RequestMapping("/ajouteannonce")
 	public ModelAndView ajouteannoncePage(ModelMap map) {
@@ -282,19 +319,20 @@ public class AccueilController {
 			Ville depart = annonceService.singleVille(annonce.getVilleDepart());
 			Ville arrivee = annonceService.singleVille(annonce
 					.getVilleArrivee());
-			Voiture voiture = voitureService.single(annonce.getVoitureID()
-					.intValue());
-			mv.addObject("utilisateur", auteurs);
+			Voiture voiture = voitureService.single(annonce.getVoitureID());
+			mv.addObject("utilisateurAuteur", auteurs);
 			mv.addObject("annonce", annonce);
 			mv.addObject("villeArrivee", arrivee);
 			mv.addObject("villeDepart", depart);
+			voiture.setNom(voiture.getType()+ " " +voiture.getNombrePlace());
 			mv.addObject("voiture", voiture);
 
 			mv.addObject("action", "/Covoso/uinscription/" + annonceID);
 			mv.addObject("menu", MenuBuild.ApresLogin("votre compte"));
 			Utilisateur user = (Utilisateur) map.get("utilisateur");
 			if (user.getUtilisateurID() == annonce.getUtilisateurID()) {
-				mv.addObject("iList", annonceService.findbyAnnonce(annonceID));
+				mv.addObject("viewinscription", null);
+				mv.addObject("annoncelis", annonceService.findbyAnnonce(annonceID));
 			} else
 				mv.addObject("viewinscription", "true");
 			return mv;
@@ -311,7 +349,8 @@ public class AccueilController {
 			Annonce annonce = annonceService.singleAnnonce(annonceID);
 			Inscription ins = new Inscription();
 			ins.setAnnonceID(annonceID);
-			ins.setUtilisateurID((Integer) map.get("utilisateurID"));
+			Utilisateur user = (Utilisateur)map.get("utilisateur");
+			ins.setUtilisateurID(user.getUtilisateurID());
 			ins.setDateInscription(new Date());
 			ins.setConfirmer(0);
 
@@ -334,18 +373,18 @@ public class AccueilController {
 			Ville depart = annonceService.singleVille(annonce.getVilleDepart());
 			Ville arrivee = annonceService.singleVille(annonce
 					.getVilleArrivee());
-			Voiture voiture = voitureService.single(annonce.getVoitureID()
-					.intValue());
-			mv.addObject("utilisateur", auteurs);
+			Voiture voiture = voitureService.single(annonce.getVoitureID());
+			mv.addObject("utilisateurAuteur", auteurs);
 			mv.addObject("annonce", annonce);
 			mv.addObject("villeArrivee", arrivee);
 			mv.addObject("villeDepart", depart);
 			mv.addObject("voiture", voiture);
 			mv.addObject("action", "/Covoso/uinscription/" + annonceID);
 			mv.addObject("menu", MenuBuild.ApresLogin("votre compte"));
-			Utilisateur user = (Utilisateur) map.get("utilisateur");
+			//Utilisateur user = (Utilisateur) map.get("utilisateur");
 			if (user.getUtilisateurID() == annonce.getUtilisateurID()) {
-				mv.addObject("iList", annonceService.findbyAnnonce(annonceID));
+				mv.addObject("viewinscription", null);
+				mv.addObject("annoncelis", annonceService.findbyAnnonce(annonceID));
 			} else
 				mv.addObject("viewinscription", "true");
 			return mv;
@@ -392,7 +431,7 @@ public class AccueilController {
 
 	@RequestMapping("/voitureupdate/{voitureId}")
 	public ModelAndView voitureUpdate(
-			@PathVariable("voitureId") Integer voitureId) {
+			@PathVariable("voitureId") Long voitureId) {
 		Voiture voi = voitureService.single(voitureId);
 		
 		return this.mvVoitreUpdate(null, voi==null?new Voiture():voi,
@@ -401,8 +440,8 @@ public class AccueilController {
 
 	@RequestMapping(value = "/voitureupdate/{voitureId}", method = RequestMethod.POST)
 	public ModelAndView voitureUpdatePage(
-			@PathVariable("voitureId") Integer voitureId,
-			@ModelAttribute("voiture") Voiture voi, BindingResult result) {
+			@PathVariable("voitureId") Long voitureId,
+			@ModelAttribute("voiture") Voiture voi, BindingResult result,ModelMap map) {
 		VoitureValidator voiValidator = new VoitureValidator();
 		voiValidator.validate(voi, result);
 		String message = "";
@@ -414,7 +453,8 @@ public class AccueilController {
 			Voiture nu = voitureService.single(voitureId);
 			nu.setType(voi.getType());
 			nu.setNombrePlace(voi.getNombrePlace());
-			nu.setUtilisateurID(voi.getUtilisateurID());
+			Utilisateur user = (Utilisateur) map.get("utilisateur");
+			voi.setUtilisateurID(user.getUtilisateurID());
 			voitureService.update(nu);
 			message = "Le mis a jour réussi";
 			re = voi;

@@ -15,7 +15,7 @@
 			<tr>
 				<td width="170px"><spring:message code="label.utilisateur" />
 				</td>
-				<td>${utilisateur.nom}${utilisateur.prenom}</td>
+				<td>${utilisateurAuteur.nom}${utilisateurAuteur.prenom}</td>
 			</tr>
 			<tr>
 				<td width="170px"><spring:message code="label.villeDepart" />
@@ -115,15 +115,15 @@
 					<th>Utilisateur</th>
 					<th>Telephone</th>
 					<th>Nombre Place</th>
-					<th>Date</th>
+					<!-- <th>Date</th> -->
 					</tr>
-				<c:forEach items="${ilist}" var="inscription">
+				<c:forEach items="${annoncelis}" var="inscription">
 					<tr>
-						<td>${inscription.inscriptionID}</td>
+						<td>${inscription.inscriptionId}</td>
 						<td>${inscription.utilisateurNom}</td>
 						<td>${inscription.utilisateurTelephone}</td>
 						<td>${inscription.nombrePlace}</td>
-						<td>${inscription.dateIncription}</td>
+						<td>${inscription.dateInscription}</td>
 						</tr>
 				</c:forEach>
 			</table>

@@ -70,7 +70,19 @@ public class CompteServiceImpl implements CompteService {
 	@Transactional
 	public Compte FindByLogin(String login) {
 		Criterion l = Restrictions.eq("login", login);
-		Criterion p = Restrictions.gt("utilisateurID", 0);
+		Criterion p = Restrictions.gt("utilisateurid", 0);
+		LogicalExpression le = Restrictions.and(l, p);
+		List<Compte> ls = udao.find(le);
+		if (ls.size() > 0)
+			return ls.get(0);
+		else
+			return null;
+	}
+	@Transactional
+	public Compte findByUtilisateurID(Integer utilisateurId)
+	{
+		Criterion l = Restrictions.eq("utilisateurid", utilisateurId);
+		Criterion p = Restrictions.gt("utilisateurid", 0);
 		LogicalExpression le = Restrictions.and(l, p);
 		List<Compte> ls = udao.find(le);
 		if (ls.size() > 0)

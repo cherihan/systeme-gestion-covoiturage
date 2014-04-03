@@ -57,16 +57,22 @@ public class VoitureServiceImpl implements VoitureService {
 		return vdao.list(page, pagesize);
 	}
 
-	public Voiture single(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	public List<Voiture> find(Integer utiliseurID) {
 		Criterion con = Restrictions.eq("utilisateurID", utiliseurID);
 		Criterion con2 = Restrictions.gt("utilisateurID", 0);
 		LogicalExpression expression = Restrictions.and(con, con2);
 		return vdao.find(expression);
+	}
+	public Voiture findbyID(Long voitureID ) {
+		try{
+		Criterion con = Restrictions.eq("voitureID", voitureID);
+		Criterion con2 = Restrictions.gt("voitureID", 0);
+		LogicalExpression expression = Restrictions.and(con, con2);
+		return vdao.find(expression).get(0);
+		}catch(Exception e){
+			return null;
+		}
 	}
 
 }

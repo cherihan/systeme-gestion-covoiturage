@@ -25,5 +25,6 @@ public interface CompteService {
 	
 	Compte login(String login, String pass);
 	
+	Compte findByUtilisateurID(Integer utilisateurId);
 	
 }

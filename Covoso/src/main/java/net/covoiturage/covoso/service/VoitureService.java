@@ -11,7 +11,7 @@ public interface VoitureService {
 
 	void update(Voiture entity);
 
-	Voiture single(int id);
+	Voiture single(Long id);
 
 	void remove(Long id);
 

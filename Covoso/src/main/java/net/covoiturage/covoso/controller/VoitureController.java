@@ -71,14 +71,14 @@ public class VoitureController {
 
 	@RequestMapping("/edit/{voitureId}")
 	public ModelAndView edit(
-@PathVariable("voitureId") Integer voitureId) {
+@PathVariable("voitureId") Long voitureId) {
 		return this.mvIndex(null, voitureService.single(voitureId),
 				"Mis à jour d'Voiture", "/Covoso/voiture/edit/" + voitureId);
 	}
 
 	@RequestMapping(value = "/edit/{voitureId}", method = RequestMethod.POST)
 	public ModelAndView editPage(
-@PathVariable("voitureId") Integer voitureId,
+@PathVariable("voitureId") Long voitureId,
 			@ModelAttribute("voiture") Voiture voi,
 			BindingResult result) {
 		VoitureValidator voiValidator = new VoitureValidator();

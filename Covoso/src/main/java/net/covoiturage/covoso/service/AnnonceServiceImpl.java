@@ -174,10 +174,7 @@ public class AnnonceServiceImpl implements AnnonceService {
 	}
 	@Transactional
 	public List<Inscription> findbyAnnonce(Long annonceID) {
-		Criterion e = Restrictions.eq("annonceID", annonceID);
-		Criterion id = Restrictions.gt("inscriptionId", new Long(0));
-		LogicalExpression le = Restrictions.and(id,e);
-		List<Inscription> result =  iDao.find(le);
+		List<Inscription> result =  iDao.findbyAnnonceId(annonceID);
 		for (int i=0;i<result.size();i++) {
 			result.get(i).setUtilisateurNom(uDao.single(result.get(i).getUtilisateurID()).getNom()+" "+uDao.single(result.get(i).getUtilisateurID()).getPrenom());
 			result.get(i).setUtilisateurTelephone(uDao.single(result.get(i).getUtilisateurID()).getTelephone());

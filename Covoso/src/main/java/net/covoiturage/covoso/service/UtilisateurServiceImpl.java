@@ -59,7 +59,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 	}
 
 	@Transactional
-	public Utilisateur single(int id) {
+	public Utilisateur single(Integer id) {
 		return udao.single(id);
 	}
 
@@ -100,6 +100,30 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 		cp.setAvatar(uc.getCompte().getAvatar());
 		cp.setUtilisateurid(us.getUtilisateurID());
 		cdao.add(cp);
+	}
+	@Transactional
+	public void updateUtilisateuretCompte(UtilisateuretCompte uc,Utilisateur user) {
+		
+		user.setNom(uc.getUtilisateur().getNom());
+		user.setPrenom(uc.getUtilisateur().getPrenom());
+		user.setEmail(uc.getUtilisateur().getEmail());
+		user.setTelephone(uc.getUtilisateur().getTelephone());
+		user.setDateUpdate(new Date());
+		
+		udao.update(user);
+		
+		Criterion nom = Restrictions.eq("utilisateurid", user.getUtilisateurID());
+		Criterion email = Restrictions.gt("utilisateurid", 0);
+		LogicalExpression le = Restrictions.and(nom,email);
+		Compte cp = cdao.find(le).get(0);
+		if(cp!=null)
+		{
+			cp.setLogin(uc.getCompte().getLogin());
+			cp.setPassword(uc.getCompte().getPassword());
+			cp.setType(uc.getCompte().getType());
+			cp.setAvatar(uc.getCompte().getAvatar());
+			cdao.update(cp);
+		}
 	}
 	@Transactional
 	public Utilisateur findEmail(String email) {

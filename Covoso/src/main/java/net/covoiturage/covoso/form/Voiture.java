@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.ForeignKey;
 
@@ -23,7 +24,6 @@ public class Voiture {
 	@Column(name = "NombrePlace")
 	Integer nombrePlace;
 
-	// @OneToOne()
 	@Column(name = "UtilisateurID")
 	@ForeignKey(name = "Utilisateur_VoitureFK")
 	Integer utilisateurID;
@@ -62,13 +62,16 @@ public class Voiture {
 	public void setUtilisateurID(Integer utilisateurID) {
 		this.utilisateurID = utilisateurID;
 	}
-	/*
-	 * Utilisateur utilisateur; public Utilisateur getUtilisateur() { if
-	 * (utilisateur == null && utilisateurID != null) return new
-	 * UtilisateurDaoImpl().single(this.getUtilisateurID()); else return
-	 * utilisateur; }
-	 * 
-	 * public void setUtilisateur(Integer utilisateur) { this.utilisateur = new
-	 * UtilisateurDaoImpl().single(this .getUtilisateurID()); }
-	 */
+
+	
+	@Transient
+	String nom;
+
+	public String getNom() {
+		return nom;
+	}
+
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
 }
