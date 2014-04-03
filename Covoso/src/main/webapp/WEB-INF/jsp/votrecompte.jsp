@@ -35,7 +35,7 @@
 				</tr>
 				<tr>
 					<td><a
-						href="/Covoso/utilisateur/edit/${utilisateur.utilisateurID}">edit</a>
+						href="/Covoso/utilisateurcompteupdate/${utilisateur.utilisateurID}">edit</a>
 					</td>
 				</tr>
 			</table>

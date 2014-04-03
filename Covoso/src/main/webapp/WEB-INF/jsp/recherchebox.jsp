@@ -55,6 +55,7 @@
 											$('.dg').datepicker({
 												showAnim : 'fadeIn'
 											});
+											$('.dg').datepicker({dateFormat: 'dd-mm-yyyy' });
 											$('.dg').css("padding-left","30px")
 													.after(
 															'<img class="datepickericon" src="<c:url value="/resources/images/icons/calendar.png"/>" alt="calendar" />');
