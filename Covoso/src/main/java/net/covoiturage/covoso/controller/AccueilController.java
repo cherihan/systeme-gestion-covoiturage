@@ -34,6 +34,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import freemarker.core.Expression;
+
 @Controller
 @SessionAttributes({ "utilisateur", "compte", "admin" })
 public class AccueilController {
@@ -70,7 +72,8 @@ public class AccueilController {
 	}
 
 	@RequestMapping("/accueil/{index}")
-	public ModelAndView accueil(@PathVariable("index") Integer index,ModelMap map) {
+	public ModelAndView accueil(@PathVariable("index") Integer index,
+			ModelMap map) {
 		ModelAndView mv = new ModelAndView("accueil");
 		mv.addObject("recherchebox", new Annonce());
 		mv.addObject("listVille", annonceService.allVille());
@@ -113,8 +116,8 @@ public class AccueilController {
 	public ModelAndView recherche(@ModelAttribute("recherche") Annonce rc,
 			BindingResult result, ModelMap map) {
 		ModelAndView mv = new ModelAndView("recherche");
-		mv.addObject("result", annonceService.listAnnonceFindAll(rc) );
-		
+		mv.addObject("result", annonceService.listAnnonceFindAll(rc));
+
 		mv.addObject("display", "true");
 		mv.addObject("recherchebox", rc);
 		mv.addObject("listVille", annonceService.allVille());
@@ -143,13 +146,18 @@ public class AccueilController {
 			@ModelAttribute("uc") UtilisateuretCompte uc, BindingResult result,
 			ModelMap map) {
 		ModelAndView mv = new ModelAndView("inscription");
-		UtilisateuretCompteValidator ucValid = new UtilisateuretCompteValidator();
-		ucValid.validate(uc, result);
-		if (result.hasErrors()) {
+		try {
+			UtilisateuretCompteValidator ucValid = new UtilisateuretCompteValidator();
+			ucValid.validate(uc, result);
+			if (result.hasErrors()) {
+				mv.addObject("message",
+						"Certains champs manquent des informations");
+			} else {
+				utilisateurService.addUtilisateuretCompte(uc);
+				mv.addObject("message", "Inscription reussi");
+			}
+		} catch (Exception e) {
 			mv.addObject("message", "Certains champs manquent des informations");
-		} else {
-			utilisateurService.addUtilisateuretCompte(uc);
-			mv.addObject("message", "Inscription reussi");
 		}
 		mv.addObject("menu", MenuBuild.AvantLogin("inscription"));
 		return mv;
@@ -281,23 +289,23 @@ public class AccueilController {
 			mv.addObject("villeArrivee", arrivee);
 			mv.addObject("villeDepart", depart);
 			mv.addObject("voiture", voiture);
-		
-			mv.addObject("action","/Covoso/uinscription/"+annonceID);
+
+			mv.addObject("action", "/Covoso/uinscription/" + annonceID);
 			mv.addObject("menu", MenuBuild.ApresLogin("votre compte"));
-			Utilisateur user = (Utilisateur)map.get("utilisateur");
-			if(user.getUtilisateurID()==annonce.getUtilisateurID())
-			{	
+			Utilisateur user = (Utilisateur) map.get("utilisateur");
+			if (user.getUtilisateurID() == annonce.getUtilisateurID()) {
 				mv.addObject("iList", annonceService.findbyAnnonce(annonceID));
-			}
-			else
+			} else
 				mv.addObject("viewinscription", "true");
 			return mv;
 		} else
 			return new ModelAndView("redirect:/login");
 	}
-	@RequestMapping(value="/uinscription/{annonceID}",method=RequestMethod.POST)
-	public ModelAndView utilisateurInscriptione(@ModelAttribute("inscription") Inscription an,
-			@PathVariable("annonceID") Long annonceID,  ModelMap map) {
+
+	@RequestMapping(value = "/uinscription/{annonceID}", method = RequestMethod.POST)
+	public ModelAndView utilisateurInscriptione(
+			@ModelAttribute("inscription") Inscription an,
+			@PathVariable("annonceID") Long annonceID, ModelMap map) {
 		if (map.get("utilisateur") != null) {
 			ModelAndView mv = new ModelAndView("uinscription");
 			Annonce annonce = annonceService.singleAnnonce(annonceID);
@@ -306,20 +314,20 @@ public class AccueilController {
 			ins.setUtilisateurID((Integer) map.get("utilisateurID"));
 			ins.setDateInscription(new Date());
 			ins.setConfirmer(0);
-			
+
 			ins.setNombrePlace(an.getNombrePlace());
-			if(ins.getNombrePlace()<0||ins.getNombrePlace()> annonce.getNombrePlace())
-			{
+			if (ins.getNombrePlace() < 0
+					|| ins.getNombrePlace() > annonce.getNombrePlace()) {
 				mv.addObject("message", "Impossible le nombre place");
-			}
-			else if(annonceService.hasInscription(annonceID, ins.getUtilisateurID())){
-				mv.addObject("message", "Vous avez deja inscrit cette covoiturage");
-			}
-			else{
-				
+			} else if (annonceService.hasInscription(annonceID,
+					ins.getUtilisateurID())) {
+				mv.addObject("message",
+						"Vous avez deja inscrit cette covoiturage");
+			} else {
+
 				annonceService.createInscription(ins);
 				mv.addObject("message", "Inscription de covoiturage reussi");
-			}	
+			}
 			mv.addObject("inscription", ins);
 			Utilisateur auteurs = utilisateurService.single(annonce
 					.getUtilisateurID());
@@ -333,43 +341,50 @@ public class AccueilController {
 			mv.addObject("villeArrivee", arrivee);
 			mv.addObject("villeDepart", depart);
 			mv.addObject("voiture", voiture);
-			mv.addObject("action","/Covoso/uinscription/"+annonceID);
+			mv.addObject("action", "/Covoso/uinscription/" + annonceID);
 			mv.addObject("menu", MenuBuild.ApresLogin("votre compte"));
-			Utilisateur user = (Utilisateur)map.get("utilisateur");
-			if(user.getUtilisateurID()==annonce.getUtilisateurID())
-			{	
+			Utilisateur user = (Utilisateur) map.get("utilisateur");
+			if (user.getUtilisateurID() == annonce.getUtilisateurID()) {
 				mv.addObject("iList", annonceService.findbyAnnonce(annonceID));
-			}
-			else
+			} else
 				mv.addObject("viewinscription", "true");
 			return mv;
 		} else
 			return new ModelAndView("redirect:/login");
 	}
+
 	//
 	@RequestMapping("/voitureinsert")
 	public ModelAndView voitureInsert() {
-		return this.mvVoitreInsert(null, new Voiture(),
-				"Mis à jour d'Voiture", "/Covoso/voitureinsert");
+		return this.mvVoitreInsert(null, new Voiture(), "Mis à jour d'Voiture",
+				"/Covoso/voitureinsert");
 	}
+
 	@RequestMapping(value = "/voitureinsert", method = RequestMethod.POST)
 	public ModelAndView voitureInsert(@ModelAttribute("voiture") Voiture voi,
-			BindingResult result,ModelMap map) {
-		VoitureValidator voiValidator = new VoitureValidator();
-		voiValidator.validate(voi, result);
+			BindingResult result, ModelMap map) {
 		String message = "";
 		Voiture re;
-		
-		if (result.hasErrors()) {
+
+		try {
+			VoitureValidator voiValidator = new VoitureValidator();
+			voiValidator.validate(voi, result);
+
+			if (result.hasErrors()) {
+				message = "Les données incorrectes";
+				re = new Voiture();
+			} else {
+				Utilisateur user = (Utilisateur) map.get("utilisateur");
+				voi.setUtilisateurID(user.getUtilisateurID());
+				voitureService.create(voi);
+
+				message = "L'insertion réussi";
+				re = voi;
+			}
+		} catch (Exception e) {
 			message = "Les données incorrectes";
 			re = new Voiture();
-		} else {
-			Utilisateur user = (Utilisateur)map.get("utilisateur");
-			voi.setUtilisateurID(user.getUtilisateurID());
-			voitureService.create(voi);
-			
-			message = "L'insertion réussi";
-			re = voi;
+
 		}
 		return this.mvVoitreInsert(message, re, "Ajoute de Voiture",
 				"/Covoso/voitureinsert");
@@ -377,16 +392,17 @@ public class AccueilController {
 
 	@RequestMapping("/voitureupdate/{voitureId}")
 	public ModelAndView voitureUpdate(
-@PathVariable("voitureId") Integer voitureId) {
-		return this.mvVoitreUpdate(null, voitureService.single(voitureId),
+			@PathVariable("voitureId") Integer voitureId) {
+		Voiture voi = voitureService.single(voitureId);
+		
+		return this.mvVoitreUpdate(null, voi==null?new Voiture():voi,
 				"Mis à jour d'Voiture", "/Covoso/voitureupdate/" + voitureId);
 	}
 
 	@RequestMapping(value = "/voitureupdate/{voitureId}", method = RequestMethod.POST)
 	public ModelAndView voitureUpdatePage(
-@PathVariable("voitureId") Integer voitureId,
-			@ModelAttribute("voiture") Voiture voi,
-			BindingResult result) {
+			@PathVariable("voitureId") Integer voitureId,
+			@ModelAttribute("voiture") Voiture voi, BindingResult result) {
 		VoitureValidator voiValidator = new VoitureValidator();
 		voiValidator.validate(voi, result);
 		String message = "";
@@ -406,27 +422,30 @@ public class AccueilController {
 		return this.mvVoitreInsert(message, new Voiture(), "Ajoute de Voiture",
 				"/Covoso/voitureinsert");
 	}
+
 	// la procedure commun
-			public ModelAndView mvVoitreUpdate(String message, Voiture voi, String title,
-					String action) {
-				ModelAndView mv = new ModelAndView("voitureupdate");
-				mv.addObject("voiture", voi);
-				mv.addObject("message", message);
-				mv.addObject("title", title);
-				mv.addObject("action", action);
-				mv.addObject("menu", MenuBuild.ApresLogin("a propos nous"));
-				return mv;
-			}
-			public ModelAndView mvVoitreInsert(String message, Voiture voi, String title,
-					String action) {
-				ModelAndView mv = new ModelAndView("voitureinsert");
-				mv.addObject("voiture", voi);
-				mv.addObject("message", message);
-				mv.addObject("title", title);
-				mv.addObject("action", action);
-				mv.addObject("menu", MenuBuild.ApresLogin("a propos nous"));
-				return mv;
-			}
+	public ModelAndView mvVoitreUpdate(String message, Voiture voi,
+			String title, String action) {
+		ModelAndView mv = new ModelAndView("voitureupdate");
+		mv.addObject("voiture", voi);
+		mv.addObject("message", message);
+		mv.addObject("title", title);
+		mv.addObject("action", action);
+		mv.addObject("menu", MenuBuild.ApresLogin("a propos nous"));
+		return mv;
+	}
+
+	public ModelAndView mvVoitreInsert(String message, Voiture voi,
+			String title, String action) {
+		ModelAndView mv = new ModelAndView("voitureinsert");
+		mv.addObject("voiture", voi);
+		mv.addObject("message", message);
+		mv.addObject("title", title);
+		mv.addObject("action", action);
+		mv.addObject("menu", MenuBuild.ApresLogin("a propos nous"));
+		return mv;
+	}
+
 	// 1. Login
 	@RequestMapping("/login")
 	public ModelAndView login(ModelMap map) {
@@ -443,7 +462,7 @@ public class AccueilController {
 			return mv;
 		}
 	}
-	
+
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ModelAndView login(@ModelAttribute("compte") Compte compte,
 			BindingResult result, ModelMap map) {
@@ -478,7 +497,8 @@ public class AccueilController {
 			}
 		}
 	}
-//
+
+	//
 	// 2.Logout
 	@RequestMapping("/logout")
 	public String logout(ModelMap map, HttpSession session) {
