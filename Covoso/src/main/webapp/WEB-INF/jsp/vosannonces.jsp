@@ -35,19 +35,19 @@
 					<td>${annonce.dateDepart}</td>
 					<td>${annonce.heureDepart}</td>
 					<td>${annonce.prix}</td>
-					<td><a hre="#">Inscription</a></td>
+					<td><a href="/Covoso/uinscription/${annonce.annonceID}">View</a></td>
 				</tr>
 				</c:forEach>
 			</table>
 		</div>
 		<div align="center">
 			<c:if test="${!aList.nav.firstPage}">
-				<a href="/Covoso/accueil/index">First</a>&nbsp;
+				<a href="/Covoso/vosannonces">First</a>&nbsp;
 			</c:if>
 			<c:forEach var="i" items="${aList.nav.indexList}">
 				<c:choose>
 					<c:when test="${i != aList.nav.currentPage}">
-						<a href="/Covoso/accueil/index/${i}">${i}</a>&nbsp;
+						<a href="/Covoso/vosannonces/${i}">${i}</a>&nbsp;
 					</c:when>
 					<c:otherwise>
 						<b>${i}</b>&nbsp;
@@ -55,7 +55,7 @@
 				</c:choose>
 			</c:forEach>
 			<c:if test="${!aList.nav.lastPage}">
-				<a href="/Covoso/accueil/index/${aList.nav.pageCount}">Last</a>
+				<a href="/Covoso/vosannonces/${aList.nav.pageCount}">Last</a>
 			</c:if>
 		</div>
 	</div>

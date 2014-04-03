@@ -10,6 +10,7 @@ import net.covoiturage.covoso.Utils.LoginValidator;
 import net.covoiturage.covoso.Utils.MenuBuild;
 import net.covoiturage.covoso.Utils.PagedGenericView;
 import net.covoiturage.covoso.Utils.UtilisateuretCompteValidator;
+import net.covoiturage.covoso.Utils.VoitureValidator;
 import net.covoiturage.covoso.form.Annonce;
 import net.covoiturage.covoso.form.Compte;
 import net.covoiturage.covoso.form.Inscription;
@@ -291,9 +292,16 @@ mv.addObject("aList", alist);
 			mv.addObject("villeArrivee", arrivee);
 			mv.addObject("villeDepart", depart);
 			mv.addObject("voiture", voiture);
+		
 			mv.addObject("action","/Covoso/uinscription/"+annonceID);
 			mv.addObject("menu", MenuBuild.ApresLogin("votre compte"));
-
+			Utilisateur user = (Utilisateur)map.get("utilisateur");
+			if(user.getUtilisateurID()==annonce.getUtilisateurID())
+			{	
+				mv.addObject("iList", annonceService.findbyAnnonce(annonceID));
+			}
+			else
+				mv.addObject("viewinscription", "true");
 			return mv;
 		} else
 			return new ModelAndView("redirect:/login");
@@ -338,12 +346,84 @@ mv.addObject("aList", alist);
 			mv.addObject("voiture", voiture);
 			mv.addObject("action","/Covoso/uinscription/"+annonceID);
 			mv.addObject("menu", MenuBuild.ApresLogin("votre compte"));
-
+			Utilisateur user = (Utilisateur)map.get("utilisateur");
+			if(user.getUtilisateurID()==annonce.getUtilisateurID())
+			{	
+				mv.addObject("iList", annonceService.findbyAnnonce(annonceID));
+			}
+			else
+				mv.addObject("viewinscription", "true");
 			return mv;
 		} else
 			return new ModelAndView("redirect:/login");
 	}
+	//
+	@RequestMapping("/voitureinsert")
+	public ModelAndView voitureInsert() {
+		return this.mvVoitreIndex(null, new Voiture(),
+				"Mis à jour d'Voiture", "/Covoso/voitureinsert");
+	}
+	@RequestMapping(value = "/voitureinsert", method = RequestMethod.POST)
+	public ModelAndView voitureInsert(@ModelAttribute("voiture") Voiture voi,
+			BindingResult result) {
+		VoitureValidator voiValidator = new VoitureValidator();
+		voiValidator.validate(voi, result);
+		String message = "";
+		Voiture re;
+		if (result.hasErrors()) {
+			message = "Les données incorrectes";
+			re = new Voiture();
+		} else {
+			voitureService.create(voi);
+			message = "L'insertion réussi";
+			re = voi;
+		}
+		return this.mvVoitreIndex(message, re, "Ajoute de Voiture",
+				"/Covoso/voitureinsert");
+	}
 
+	@RequestMapping("/voitureupdate/{voitureId}")
+	public ModelAndView voitureUpdate(
+@PathVariable("voitureId") Integer voitureId) {
+		return this.mvVoitreIndex(null, voitureService.single(voitureId),
+				"Mis à jour d'Voiture", "/Covoso/voitureupdate/" + voitureId);
+	}
+
+	@RequestMapping(value = "/voitureupdate/{voitureId}", method = RequestMethod.POST)
+	public ModelAndView voitureUpdatePage(
+@PathVariable("voitureId") Integer voitureId,
+			@ModelAttribute("voiture") Voiture voi,
+			BindingResult result) {
+		VoitureValidator voiValidator = new VoitureValidator();
+		voiValidator.validate(voi, result);
+		String message = "";
+		Voiture re;
+		if (result.hasErrors()) {
+			message = "Les données incorrectes";
+			re = new Voiture();
+		} else {
+			Voiture nu = voitureService.single(voitureId);
+			nu.setType(voi.getType());
+			nu.setNombrePlace(voi.getNombrePlace());
+			nu.setUtilisateurID(voi.getUtilisateurID());
+			voitureService.update(nu);
+			message = "Le mis a jour réussi";
+			re = voi;
+		}
+		return this.mvVoitreIndex(message, new Voiture(), "Ajoute de Voiture",
+				"/Covoso/voitureinsert");
+	}
+	// la procedure commun
+			public ModelAndView mvVoitreIndex(String message, Voiture voi, String title,
+					String action) {
+				ModelAndView mv = new ModelAndView("voitureinsert");
+				mv.addObject("voiture", voi);
+				mv.addObject("message", message);
+				mv.addObject("title", title);
+				mv.addObject("action", action);
+				mv.addObject("menu", MenuBuild.ApresLogin("a propos nous"));
+				return mv;
+			}
 	// 1. Login
 	@RequestMapping("/login")
 	public ModelAndView login(ModelMap map) {
@@ -360,7 +440,7 @@ mv.addObject("aList", alist);
 			return mv;
 		}
 	}
-
+	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ModelAndView login(@ModelAttribute("compte") Compte compte,
 			BindingResult result, ModelMap map) {
@@ -395,7 +475,7 @@ mv.addObject("aList", alist);
 			}
 		}
 	}
-
+//
 	// 2.Logout
 	@RequestMapping("/logout")
 	public String logout(ModelMap map, HttpSession session) {

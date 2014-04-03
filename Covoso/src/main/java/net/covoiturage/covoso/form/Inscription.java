@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.ForeignKey;
 
@@ -35,7 +36,10 @@ public class Inscription {
 
 	@Column(name = "Confirmer")
 	int confirmer;
-
+	@Transient
+	String UtilisateurNom;
+	@Transient
+	String UtilisateurTelephone;
 	public Long getInscriptionId() {
 		return inscriptionId;
 	}
@@ -46,6 +50,22 @@ public class Inscription {
 
 	public Long getAnnonceID() {
 		return annonceID;
+	}
+
+	public String getUtilisateurNom() {
+		return UtilisateurNom;
+	}
+
+	public void setUtilisateurNom(String utilisateurNom) {
+		UtilisateurNom = utilisateurNom;
+	}
+
+	public String getUtilisateurTelephone() {
+		return UtilisateurTelephone;
+	}
+
+	public void setUtilisateurTelephone(String utilisateurTelephone) {
+		UtilisateurTelephone = utilisateurTelephone;
 	}
 
 	public void setAnnonceID(Long annonceID) {

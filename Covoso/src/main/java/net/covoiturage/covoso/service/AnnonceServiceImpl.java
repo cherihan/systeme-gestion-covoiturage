@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.covoiturage.covoso.dao.AnnonceDao;
 import net.covoiturage.covoso.dao.InscriptionDao;
+import net.covoiturage.covoso.dao.UtilisateurDao;
 import net.covoiturage.covoso.dao.VilleDao;
 import net.covoiturage.covoso.form.Annonce;
 import net.covoiturage.covoso.form.Inscription;
@@ -27,7 +28,8 @@ public class AnnonceServiceImpl implements AnnonceService {
 	protected VilleDao vDao;
 	@Autowired
 	protected InscriptionDao iDao;
-
+	@Autowired
+	protected UtilisateurDao uDao;
 	@Transactional
 	public void createAnnonce(Annonce entity) {
 		aDao.add(entity);
@@ -175,7 +177,12 @@ public class AnnonceServiceImpl implements AnnonceService {
 		Criterion e = Restrictions.eq("annonceID", annonceID);
 		Criterion id = Restrictions.gt("inscriptionId", new Long(0));
 		LogicalExpression le = Restrictions.and(id,e);
-		return iDao.find(le);
+		List<Inscription> result =  iDao.find(le);
+		for (int i=0;i<result.size();i++) {
+			result.get(i).setUtilisateurNom(uDao.single(result.get(i).getUtilisateurID()).getNom()+" "+uDao.single(result.get(i).getUtilisateurID()).getPrenom());
+			result.get(i).setUtilisateurTelephone(uDao.single(result.get(i).getUtilisateurID()).getTelephone());
+		}
+		return result;
 	}
 	@Transactional
 	public List<Inscription> findbyUtilisateur(Integer utilisateurID) {

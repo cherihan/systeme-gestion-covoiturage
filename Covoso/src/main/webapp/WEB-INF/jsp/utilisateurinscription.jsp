@@ -80,6 +80,8 @@
 				<td>${annonce.dateCreate}</td>
 			</tr>
 		</table>
+		<c:if test="${!empty viewinscription}">
+			
 		<h3>Inscription d'un nouveau Covoiturage</h3>
 		<c:if test="${!empty message}">
 			<div class="notification information">${message}</div>
@@ -103,6 +105,29 @@
 			</div>
 
 		</form:form>
+		
+		</c:if>
+		<c:if test="${empty viewinscription}">
+		<h3>List d'Inscription de la Covoiturage</h3>
+		<table class="data">
+				<tr>
+					<th>Inscription ID</th>
+					<th>Utilisateur</th>
+					<th>Telephone</th>
+					<th>Nombre Place</th>
+					<th>Date</th>
+					</tr>
+				<c:forEach items="${ilist}" var="inscription">
+					<tr>
+						<td>${inscription.inscriptionID}</td>
+						<td>${inscription.utilisateurNom}</td>
+						<td>${inscription.utilisateurTelephone}</td>
+						<td>${inscription.nombrePlace}</td>
+						<td>${inscription.dateIncription}</td>
+						</tr>
+				</c:forEach>
+			</table>
+		</c:if>
 		<div class="clear"></div>
 	</div>
 </div>

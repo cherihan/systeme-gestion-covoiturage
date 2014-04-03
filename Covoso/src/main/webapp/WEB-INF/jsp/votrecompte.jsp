@@ -71,7 +71,7 @@
 						<td>${voiture.voitureID}</td>
 						<td>${voiture.type}</td>
 						<td>${voiture.nombrePlace}</td>
-						<td><a href="/Covoso/voiture/edit/${voiture.voitureID}">edit</a></td>
+						<td><a href="/Covoso/voitureinsert/${voiture.voitureID}">edit</a></td>
 					</tr>
 				</c:forEach>
 				</tr>
