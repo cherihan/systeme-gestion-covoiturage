@@ -41,7 +41,7 @@
 								<td>${annonce.dateDepart}</td>
 								<td>${annonce.heureDepart}</td>
 								<td>${annonce.prix}</td>
-								<td><a hrf="#">Inscription</a></td>
+								<td><a hrf="/Covoso/uinscription/${annonce.annonceID}">Inscription</a></td>
 							</tr>
 						</c:forEach>
 					</table>

@@ -350,6 +350,7 @@ public class AccueilController {
 			Inscription ins = new Inscription();
 			ins.setAnnonceID(annonceID);
 			Utilisateur user = (Utilisateur)map.get("utilisateur");
+			try{
 			ins.setUtilisateurID(user.getUtilisateurID());
 			ins.setDateInscription(new Date());
 			ins.setConfirmer(0);
@@ -367,6 +368,9 @@ public class AccueilController {
 				annonceService.createInscription(ins);
 				mv.addObject("message", "Inscription de covoiturage reussi");
 			}
+		}catch(Exception e){
+			mv.addObject("message", "Impossible le nombre place");
+		}
 			mv.addObject("inscription", ins);
 			Utilisateur auteurs = utilisateurService.single(annonce
 					.getUtilisateurID());
