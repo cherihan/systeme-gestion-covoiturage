@@ -113,17 +113,6 @@ public class AccueilController {
 	public ModelAndView recherche(@ModelAttribute("recherche") Annonce rc,
 			BindingResult result, ModelMap map) {
 		ModelAndView mv = new ModelAndView("recherche");
-
-		// recherche
-		/*
-		PagedGenericView<Annonce> alist = new PagedGenericView<Annonce>();
-		alist.getNav().setRowCount(annonceService.countAnnonceFind(rc));
-
-		alist.getNav().setCurrentPage(1);
-		alist.setEntities(annonceService.listAnnonceFind(rc, alist.getNav()
-				.getCurrentPage(), alist.getNav().getPageSize()));
-mv.addObject("aList", alist);
-*/
 		mv.addObject("result", annonceService.listAnnonceFindAll(rc) );
 		
 		mv.addObject("display", "true");
@@ -360,32 +349,36 @@ mv.addObject("aList", alist);
 	//
 	@RequestMapping("/voitureinsert")
 	public ModelAndView voitureInsert() {
-		return this.mvVoitreIndex(null, new Voiture(),
+		return this.mvVoitreInsert(null, new Voiture(),
 				"Mis à jour d'Voiture", "/Covoso/voitureinsert");
 	}
 	@RequestMapping(value = "/voitureinsert", method = RequestMethod.POST)
 	public ModelAndView voitureInsert(@ModelAttribute("voiture") Voiture voi,
-			BindingResult result) {
+			BindingResult result,ModelMap map) {
 		VoitureValidator voiValidator = new VoitureValidator();
 		voiValidator.validate(voi, result);
 		String message = "";
 		Voiture re;
+		
 		if (result.hasErrors()) {
 			message = "Les données incorrectes";
 			re = new Voiture();
 		} else {
+			Utilisateur user = (Utilisateur)map.get("utilisateur");
+			voi.setUtilisateurID(user.getUtilisateurID());
 			voitureService.create(voi);
+			
 			message = "L'insertion réussi";
 			re = voi;
 		}
-		return this.mvVoitreIndex(message, re, "Ajoute de Voiture",
+		return this.mvVoitreInsert(message, re, "Ajoute de Voiture",
 				"/Covoso/voitureinsert");
 	}
 
 	@RequestMapping("/voitureupdate/{voitureId}")
 	public ModelAndView voitureUpdate(
 @PathVariable("voitureId") Integer voitureId) {
-		return this.mvVoitreIndex(null, voitureService.single(voitureId),
+		return this.mvVoitreUpdate(null, voitureService.single(voitureId),
 				"Mis à jour d'Voiture", "/Covoso/voitureupdate/" + voitureId);
 	}
 
@@ -410,11 +403,21 @@ mv.addObject("aList", alist);
 			message = "Le mis a jour réussi";
 			re = voi;
 		}
-		return this.mvVoitreIndex(message, new Voiture(), "Ajoute de Voiture",
+		return this.mvVoitreInsert(message, new Voiture(), "Ajoute de Voiture",
 				"/Covoso/voitureinsert");
 	}
 	// la procedure commun
-			public ModelAndView mvVoitreIndex(String message, Voiture voi, String title,
+			public ModelAndView mvVoitreUpdate(String message, Voiture voi, String title,
+					String action) {
+				ModelAndView mv = new ModelAndView("voitureupdate");
+				mv.addObject("voiture", voi);
+				mv.addObject("message", message);
+				mv.addObject("title", title);
+				mv.addObject("action", action);
+				mv.addObject("menu", MenuBuild.ApresLogin("a propos nous"));
+				return mv;
+			}
+			public ModelAndView mvVoitreInsert(String message, Voiture voi, String title,
 					String action) {
 				ModelAndView mv = new ModelAndView("voitureinsert");
 				mv.addObject("voiture", voi);

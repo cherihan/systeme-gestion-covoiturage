@@ -56,7 +56,7 @@
 					<td>${compte.avatar}</td>
 				</tr>
 			</table>
-			<h3>Vos voitures</h3>
+			<h3>Vos voitures</h3> <a href="/Covoso/voitureinsert">[Ajoute]</a>
 			<table class="data">
 				<tr>
 					<th>VoitureID</th>
@@ -71,7 +71,7 @@
 						<td>${voiture.voitureID}</td>
 						<td>${voiture.type}</td>
 						<td>${voiture.nombrePlace}</td>
-						<td><a href="/Covoso/voitureinsert/${voiture.voitureID}">edit</a></td>
+						<td><a href="/Covoso/voitureupdate/${voiture.voitureID}">edit</a></td>
 					</tr>
 				</c:forEach>
 				</tr>

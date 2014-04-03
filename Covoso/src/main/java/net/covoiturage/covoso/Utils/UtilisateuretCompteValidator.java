@@ -23,7 +23,7 @@ public class UtilisateuretCompteValidator {
 		Utilisateur user = entity.getUtilisateur();
 		Compte comp = entity.getCompte();
 		if (comp != null) {
-			if (comp.getLogin().length()<1) {
+			if (comp.getLogin()=="") {
 				errors.rejectValue("login", "*");
 			}
 			/*else
@@ -33,23 +33,23 @@ public class UtilisateuretCompteValidator {
 					errors.rejectValue("login", "Exist le nom de login");
 				}
 			}*/
-			if (comp.getPassword().length()<6) {
+			if (comp.getPassword()=="") {
 				errors.rejectValue("prenom", "*");
 			}
 			if (comp.getPassword().length() < 6) {
 				errors.rejectValue("password", "mot de passe > 6");
 			}
 		} else if (user != null) {
-			if (user.getNom().length()<0) {
+			if (user.getNom()=="") {
 				errors.rejectValue("nom", "*");
 			}
-			if (user.getPrenom().length()<0) {
+			if (user.getPrenom()=="") {
 				errors.rejectValue("prenom", "*");
 			}
-			if (user.getTelephone().length()<10) {
+			if (user.getTelephone()=="") {
 				errors.rejectValue("telephone", "*");
 			}
-			if (user.getEmail().length()<0) {
+			if (user.getEmail()=="") {
 				errors.rejectValue("email", "*");
 			} else if (uservice.findEmail(user.getEmail()) != null) {
 				errors.rejectValue("email", "Existe ce mel");
