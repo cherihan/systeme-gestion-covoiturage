@@ -6,7 +6,7 @@ xmlns="http://java.sun.com/xml/ns/javaee"
   id="WebApp_ID" version="2.5">
   <display-name>Covoso</display-name>
 	<welcome-file-list>
-		<welcome-file>/accueil</welcome-file>
+		<welcome-file>/</welcome-file>
 	</welcome-file-list>
 	<servlet>
 		<servlet-name>avc</servlet-name>

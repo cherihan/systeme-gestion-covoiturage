@@ -1,6 +1,7 @@
 package net.covoiturage.covoso.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -356,15 +357,21 @@ public class AccueilController {
 			ins.setConfirmer(0);
 
 			ins.setNombrePlace(an.getNombrePlace());
+			List<Inscription> listI= annonceService.findbyAnnonce(annonceID);
+			int totalnombre=0;
+			for (Inscription inscription : listI) {
+				totalnombre += inscription.getNombrePlace();
+			}
+			int restplace = annonce.getNombrePlace()-totalnombre;
 			if (ins.getNombrePlace() < 0
-					|| ins.getNombrePlace() > annonce.getNombrePlace()) {
-				mv.addObject("message", "Impossible le nombre place");
+					|| ins.getNombrePlace() > restplace) {
+				mv.addObject("message", "Impossible le nombre place est dépassé. Nombre disponible: "+restplace);
 			} else if (annonceService.hasInscription(annonceID,
 					ins.getUtilisateurID())) {
 				mv.addObject("message",
-						"Vous avez deja inscrit cette covoiturage");
+						"Vous etes deja inscrit pour cette covoiturage");
 			} else {
-
+				
 				annonceService.createInscription(ins);
 				mv.addObject("message", "Inscription de covoiturage reussi");
 			}
